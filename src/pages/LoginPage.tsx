@@ -61,7 +61,7 @@ export default function LoginPage() {
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{' '}
-                  <Link to="/register">Sign up</Link>
+                  <Link to="/auth/register">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
