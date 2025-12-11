@@ -13,9 +13,28 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Link } from 'react-router';
+import { login } from '@/http/api';
+import { useMutation } from '@tanstack/react-query';
+import { LoaderCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    mutation.mutate({ email, password });
+  }
+
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => navigate('/dashboard/home'),
+  });
+
   return (
     <section className="flex justify-center items-center h-screen">
       <Card className="w-full max-w-sm">
@@ -26,11 +45,13 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleLogin}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -47,20 +68,31 @@ export default function LoginPage() {
                   </a>
                 </div>
                 <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   type="password"
                   required
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button
+                  type="submit"
+                  disabled={mutation.isPending}>
+                  <LoaderCircle
+                    className={`${
+                      mutation.isPending ? 'animate-spin' : 'hidden'
+                    }`}
+                  />
+                  Login
+                </Button>
                 <Button
                   variant="outline"
                   type="button">
                   Login with Google
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account?{' '}
+                  Don&apos;t have an account?
                   <Link to="/auth/register">Sign up</Link>
                 </FieldDescription>
               </Field>
