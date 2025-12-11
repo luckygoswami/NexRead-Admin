@@ -18,6 +18,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -30,13 +31,16 @@ export default function RegisterPage() {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: () => navigate('/dashboard/home'),
+    onError: (err: any) => {
+      toast.error(err.response?.data?.message ?? 'Something went wrong.');
+    },
   });
 
   function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      alert('Password and confirm password are not same!');
+      toast.error('Password and confirm password must match.');
       return;
     }
 
