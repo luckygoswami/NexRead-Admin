@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { login } from '@/http/api';
+import { useTokenStore } from '@/store';
 import { useMutation } from '@tanstack/react-query';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
@@ -25,6 +26,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+  const { setToken } = useTokenStore((state) => state);
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,7 +35,10 @@ export default function LoginPage() {
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => navigate('/dashboard/home'),
+    onSuccess: (data) => {
+      setToken(data.authToken);
+      navigate('/dashboard/home');
+    },
     onError: (err: any) => {
       toast.error(err.response?.data?.message ?? 'Something went wrong.');
     },
