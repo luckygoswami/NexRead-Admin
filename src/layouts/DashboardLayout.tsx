@@ -20,10 +20,22 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { useTokenStore } from '@/store';
 import { Command, Home, Library } from 'lucide-react';
-import { Link, Outlet } from 'react-router';
+import { Link, Navigate, Outlet } from 'react-router';
 
 export default function DashboardLayout() {
+  const { token } = useTokenStore((state) => state);
+
+  if (!token) {
+    return (
+      <Navigate
+        to={'/auth/login'}
+        replace
+      />
+    );
+  }
+
   return (
     <SidebarProvider>
       <Sidebar variant="inset">
