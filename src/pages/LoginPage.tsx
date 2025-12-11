@@ -18,6 +18,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -33,6 +34,9 @@ export default function LoginPage() {
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: () => navigate('/dashboard/home'),
+    onError: (err: any) => {
+      toast.error(err.response?.data?.message ?? 'Something went wrong.');
+    },
   });
 
   return (
