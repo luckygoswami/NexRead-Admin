@@ -1,3 +1,4 @@
+import type { Book } from '@/types';
 import axios from 'axios';
 
 const api = axios.create({
@@ -19,4 +20,9 @@ export const register = async (data: {
 }) => {
   const res = await api.post('/users/register', data);
   return res.data;
+};
+
+export const getBooks = async () => {
+  const res = await api.get('/books');
+  return res.data as Book[];
 };

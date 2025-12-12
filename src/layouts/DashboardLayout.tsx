@@ -167,7 +167,7 @@ export default function DashboardLayout() {
             </Breadcrumb>
           </div>
         </header>
-        <main className="flex justify-center items-center h-full">
+        <main className="p-5">
           <Outlet />
         </main>
       </SidebarInset>
