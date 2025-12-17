@@ -25,7 +25,8 @@ import {
 import { getBooks } from '@/http/api';
 import { formatDate } from '@/utils';
 import { useQuery } from '@tanstack/react-query';
-import { MoreHorizontal } from 'lucide-react';
+import { CirclePlus, MoreHorizontal } from 'lucide-react';
+import { Link } from 'react-router';
 
 export default function BooksPage() {
   const { data } = useQuery({
@@ -37,9 +38,17 @@ export default function BooksPage() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Books</CardTitle>
-        <CardDescription>Manage your all books.</CardDescription>
+      <CardHeader className="flex justify-between items-center">
+        <span>
+          <CardTitle>Books</CardTitle>
+          <CardDescription>Manage your all books.</CardDescription>
+        </span>
+        <Link to="/dashboard/books/add">
+          <Button>
+            <CirclePlus className="size-5" />
+            Add book
+          </Button>
+        </Link>
       </CardHeader>
       <CardContent>
         <Table>
