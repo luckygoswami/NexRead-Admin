@@ -76,6 +76,7 @@ export default function AddBook() {
   function submitHandler(values: z.infer<typeof formSchema>) {
     const formdata = new FormData();
     formdata.append('title', values.title);
+    formdata.append('author', values.author);
     formdata.append('genre', values.genre);
     formdata.append('description', values.description);
     formdata.append('coverImage', values.coverImage[0]);
