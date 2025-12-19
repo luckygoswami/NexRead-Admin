@@ -1,3 +1,14 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,11 +33,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getBooks } from '@/http/api';
+import { deleteBook, getBooks } from '@/http/api';
+import type { Book } from '@/types';
 import { formatDate } from '@/utils';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CirclePlus, MoreHorizontal } from 'lucide-react';
 import { Link } from 'react-router';
+import { toast } from 'sonner';
 
 export default function BooksPage() {
   const { data } = useQuery({
@@ -35,6 +48,27 @@ export default function BooksPage() {
     staleTime: 10000,
   });
   // TODO: handle loading and error states
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: deleteBook,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['books'],
+      });
+      // TODO: add promise toast for success
+      toast.success('Book successfully deleted.');
+    },
+    onError: () => {
+      toast.error('Unable to delete book.');
+    },
+  });
+
+  function handleDelete(bookId: Book['_id']) {
+    console.log(bookId);
+    mutate(bookId);
+  }
 
   return (
     <Card>
@@ -105,7 +139,31 @@ export default function BooksPage() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <AlertDialog>
+                            <AlertDialogTrigger>Delete</AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete this book and remove this
+                                  book's data from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(book._id)}>
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

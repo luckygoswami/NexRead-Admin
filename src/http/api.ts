@@ -50,3 +50,14 @@ export const createBook = async (data: FormData) => {
   });
   return res.data;
 };
+
+export const deleteBook = async (bookId: Book['_id']) => {
+  const { token } = useTokenStore.getState();
+  const res = await api.delete(`/books/${bookId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
