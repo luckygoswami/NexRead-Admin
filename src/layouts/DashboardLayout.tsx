@@ -88,18 +88,22 @@ export default function DashboardLayout() {
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Home />
-                  <Link to={'/dashboard/home'}>Home</Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Library />
-                  <Link to={'/dashboard/books'}>Books</Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <Link to={'/dashboard/home'}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Home />
+                    Home
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </Link>
+              <Link to={'/dashboard/books'}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <Library />
+                    Books
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </Link>
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
