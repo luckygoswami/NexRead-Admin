@@ -32,7 +32,13 @@ export const register = async (data: {
 };
 
 export const getBooks = async () => {
-  const res = await api.get('/books');
+  const { token } = useTokenStore.getState();
+
+  const res = await api.get('/books', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data as Book[];
 };
 
